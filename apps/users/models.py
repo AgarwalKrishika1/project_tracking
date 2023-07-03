@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class CustomUser(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.username
+
+
 # Create your models here.
 class UserProfile(models.Model):
     class UserRole(models.TextChoices):
@@ -9,7 +17,7 @@ class UserProfile(models.Model):
         project_manager = 'P', 'project_manager'
 
     role = models.CharField(max_length=1, choices=UserRole.choices)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     mobile = models.IntegerField()
     address = models.JSONField(null=True, blank=True)
     avatar = models.ImageField(upload_to='avatar', null=True, blank=True)
@@ -20,3 +28,4 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
