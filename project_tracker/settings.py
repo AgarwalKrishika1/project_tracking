@@ -50,10 +50,12 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_swagger',
+    'drf_yasg'
 ]
 
 CREATED_APPS = [
     'apps.users',
+    'apps.projects',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CREATED_APPS + THIRD_PARTY_APPS
@@ -93,7 +95,7 @@ WSGI_APPLICATION = 'project_tracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env.str('DB_NAME'),
         'USER': env.str('DB_USERNAME'),
         'PASSWORD': env.str('DB_PASSWORD'),
