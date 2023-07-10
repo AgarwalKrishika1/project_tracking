@@ -50,7 +50,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_swagger',
-    'drf_yasg'
+    'drf_yasg',
+    'rest_framework.authtoken'
 ]
 
 CREATED_APPS = [
@@ -138,16 +139,24 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Authentication
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend'
+    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 # MEDIA
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
 
 # LOGGERS
 LOG_DIR = os.path.join(BASE_DIR, "logs")
