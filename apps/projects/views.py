@@ -1,6 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
-from apps.projects.models import Client, Projects
-from apps.projects.serializer import ClientSerializer, ProjectsSerializer
+from apps.projects.models import Client, Projects, Developer
+from apps.projects.serializer import ClientSerializer, ProjectsSerializer, ProjectDeveloperSerializer
+
+
+class ProjectDeveloperViewSet(ModelViewSet):
+    queryset = Developer.objects.all()
+    serializer_class = ProjectDeveloperSerializer
 
 
 class ClientViewSet(ModelViewSet):
