@@ -19,7 +19,7 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
-from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView,)
+from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView,)
 
 from apps.users.views import UserCreateView
 
@@ -42,8 +42,8 @@ urlpatterns = [
     path('users/create/', UserCreateView.as_view(), name='user-create'),
     path("user/", include('apps.users.urls'), name='user'),
     # path("clients/", include('apps.projects.urls'), name='clients'),
-    # path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 # urlpatterns += [
