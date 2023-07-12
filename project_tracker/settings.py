@@ -45,18 +45,20 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'drf_yasg',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
 ]
 
 CREATED_APPS = [
     'apps.users',
     'apps.projects',
+    'apps.master',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CREATED_APPS + THIRD_PARTY_APPS
