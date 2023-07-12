@@ -1,15 +1,38 @@
+from enum import Enum
 from django.db import models
 from apps.users.models import User, UserProfile
+from apps.master.models import ProjectCategory
 
 
-class Projects(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
-    # client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    starting_date = models.DateField()
-    ending_date = models.DateField()
-    project_manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+class ProjectStatus(Enum):
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    CANCELLED = "CANCELLED"
+    COMPLETED = "COMPLETED"
+
+    @classmethod
+    def project_status_choice(cls):
+        return [(i.value, i.name) for i in cls]
+
+
+class Base(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Projects(Base):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    category = models.CharField(ProjectCategory.get_category, default='None')
+    status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(), default="INACTIVE")
+    logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
+    # ending_date = models.DateField()
+    # project_manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
     # users = models.ManyToManyField(User, related_name='projects')
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

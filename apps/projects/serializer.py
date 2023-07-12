@@ -2,6 +2,7 @@ from rest_framework import serializers
 from apps.projects.models import Client, Projects, Developer
 from apps.users.models import UserProfile, User
 
+
 class ClientSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -29,7 +30,6 @@ class ProjectsSerializer(serializers.ModelSerializer):
 
 
 class ProjectDeveloperSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Developer
         fields = '__all__'
