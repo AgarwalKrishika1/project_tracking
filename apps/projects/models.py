@@ -30,8 +30,9 @@ class Projects(Base):
     status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(), default="INACTIVE")
     logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
     # ending_date = models.DateField()
-    # project_manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+    project_manager = models.ManyToManyField(UserProfile, related_name='project_manager')
     # users = models.ManyToManyField(User, related_name='projects')
+
     # client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):
