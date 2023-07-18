@@ -6,17 +6,19 @@ from django.db import models
 
 class ProjectCategory(models.Model):
 
-    class Pcategory(models.TextChoices):
-        production = 'production', 'Production',
-        web_development = 'web_development', 'Web Development',
-        social = 'social', 'Social',
-        educational = 'educational', 'Educational',
-        research = 'research', 'Research'
+    # class Pcategory(models.TextChoices):
+        # production = 'production', 'Production',
+        # web_development = 'web_development', 'Web Development',
+        # social = 'social', 'Social',
+        # educational = 'educational', 'Educational',
+        # research = 'research', 'Research'
 
-    category = models.CharField(choices=Pcategory.choices)
+    name = models.CharField()
 
-    def get_category(self):
-        return self.category
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'master'
+        verbose_name = 'Project Category'
+        verbose_name_plural = 'Project Categories'
