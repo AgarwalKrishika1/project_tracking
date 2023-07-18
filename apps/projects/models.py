@@ -26,20 +26,18 @@ class Base(models.Model):
 class Projects(Base):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    category = models.CharField(ProjectCategory.get_category, default='None')
-    status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(), default="INACTIVE")
+    category = models.ForeignKey(ProjectCategory, on_delete=models.SET_NULL, null=True)
+    status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(), default=ProjectStatus.INACTIVE.value)
     logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
-    # ending_date = models.DateField()
-    project_manager = models.ManyToManyField(UserProfile, related_name='project_manager')
-    # users = models.ManyToManyField(User, related_name='projects')
-
-    # client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    project_manager = models.ForeignKey(UserProfile, related_name='project_manager', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         db_table = 'projects'
+        verbose_name = 'Project'
+        verbose_name_plural = 'Projects'
 
 
 class Client(models.Model):

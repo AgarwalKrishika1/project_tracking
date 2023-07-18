@@ -20,6 +20,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class ProjectsSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
+    project_manager = serializers.StringRelatedField()
     class Meta:
         model = Projects
         fields = '__all__'
@@ -27,6 +29,11 @@ class ProjectsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         data = super().create(validated_data)
         return data
+
+    # def to_representation(self, instance):
+    #     rep = super(ProjectsSerializer, self).to_representation(instance)
+    #     rep['category'] = instance.category.name
+    #     return rep
 
 
 class ProjectDeveloperSerializer(serializers.ModelSerializer):

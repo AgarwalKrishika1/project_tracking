@@ -19,7 +19,7 @@ class ProjectsViewSet(ModelViewSet):
     queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["name", "category", "status", "project_manager"]
+    filterset_fields = ["category", "status", "project_manager"]
     search_fields = ["name"]
 
 
