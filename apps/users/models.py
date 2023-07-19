@@ -2,30 +2,26 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class CustomUser(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField()
-
-    def __str__(self):
-        return self.username
-
-
 # Create your models here.
 class UserProfile(models.Model):
     class UserRole(models.TextChoices):
-        developer = 'D', 'developer'
-        project_manager = 'P', 'project_manager'
+        developer = 'developer', 'developer'
+        project_manager = 'project_manager', 'project_manager'
 
-    role = models.CharField(max_length=1, choices=UserRole.choices)
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    mobile = models.IntegerField()
+    class Gender(models.TextChoices):
+        male = 'male', 'male',
+        female = 'female', 'female',
+        others = 'others', 'others'
+
+    role = models.CharField(choices=UserRole.choices)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    mobile = models.CharField()
     address = models.JSONField(null=True, blank=True)
     avatar = models.ImageField(upload_to='avatar', null=True, blank=True)
-    gender = models.CharField(max_length=6)
+    gender = models.CharField(choices=Gender.choices)
 
     class Meta:
         db_table = 'user_profile'
 
     def __str__(self):
         return self.user.username
-
