@@ -26,10 +26,6 @@ class ProjectsSerializer(serializers.ModelSerializer):
         model = Projects
         fields = '__all__'
 
-    def create(self, validated_data):
-        data = super().create(validated_data)
-        return data
-
     # def to_representation(self, instance):
     #     rep = super(ProjectsSerializer, self).to_representation(instance)
     #     rep['category'] = instance.category.name
