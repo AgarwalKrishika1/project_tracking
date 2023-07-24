@@ -13,12 +13,12 @@ class UserProfile(models.Model):
         female = 'female', 'female',
         others = 'others', 'others'
 
-    role = models.CharField(choices=UserRole.choices)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile = models.CharField()
     address = models.JSONField(null=True, blank=True)
     avatar = models.ImageField(upload_to='avatar', null=True, blank=True)
     gender = models.CharField(choices=Gender.choices)
+    role = models.CharField(choices=UserRole.choices)
 
     class Meta:
         db_table = 'user_profile'

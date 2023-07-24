@@ -14,7 +14,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         username = self.context.get('username')
-        user = User.objects.create_user(username=username, email=None, password=None)
+        password = self.context.get('password')
+        email = self.context.get('email')
+        user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
         user_profile = UserProfile(user_id=user.id, **validated_data)
         user_profile.save()
@@ -34,14 +36,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'profile']
 
-    def create(self, validated_data):
-        profile_data = validated_data.pop('profile', {})
-        password = validated_data.pop('password')
-
-        user = User.objects.create(**validated_data)
-        user.set_password(password)
-        user.save()
-
-        # profile = UserProfile.objects.create(user=user, **profile_data)
-
-        return user
+    # def create(self, validated_data):
+    #     profile_data = validated_data.pop('profile', {})
+    #     password = validated_data.pop('password')
+    #
+    #     user = User.objects.create(**validated_data)
+    #     user.set_password(password)
+    #     user.save()
+    #
+    #     # profile = UserProfile.objects.create(user=user, **profile_data)
+    #
+    #     return user
