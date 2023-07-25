@@ -4,7 +4,7 @@ from apps.projects.serializer import ClientSerializer, ProjectsSerializer, Proje
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission, JrDeveloperPermission
-
+from rest_framework.permissions import IsAuthenticated
 
 class ProjectDeveloperViewSet(ModelViewSet):
     queryset = Developer.objects.all()
@@ -38,7 +38,7 @@ class ProjectsViewSet(ModelViewSet):
 
     def get_permissions(self):
         permissions = super().get_permissions()
-        perm_list = []
+        perm_list = [IsAuthenticated]
         if self.request.method == "PATCH":
             perm_list.append(
                 SrDeveloperPermission | ProjectManagerPermission
