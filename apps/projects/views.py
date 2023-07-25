@@ -38,11 +38,12 @@ class ProjectsViewSet(ModelViewSet):
 
     def get_permissions(self):
         permissions = super().get_permissions()
-        # ToDo: Add permission to patch method for sr developer and project manager
-        # if self.request.method == "PATCH":
-        #     # object_list = [ProjectManagerPermission(), SrDeveloperPermission()]
-        #     return [ProjectManagerPermission() , SrDeveloperPermission()]
-
+        perm_list = []
+        if self.request.method == "PATCH":
+            perm_list.append(
+                SrDeveloperPermission | ProjectManagerPermission
+            )
+            return [permission() for permission in perm_list]
         if self.request.method == 'POST':
             return [ProjectManagerPermission()]
         return permissions
