@@ -1,11 +1,9 @@
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from apps.projects.models import Client, Projects, Developer
 from apps.projects.serializer import ClientSerializer, ProjectsSerializer, ProjectDeveloperSerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from apps.projects.permissions import AdminPermission, ProjectManagerPermission, SrDeveloperPermission,JrDeveloperPermission
-from rest_framework.permissions import IsAuthenticated
+from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission, JrDeveloperPermission
 
 
 class ProjectDeveloperViewSet(ModelViewSet):
@@ -40,8 +38,11 @@ class ProjectsViewSet(ModelViewSet):
 
     def get_permissions(self):
         permissions = super().get_permissions()
-        if self.request.method == "PATCH":
-            return [SrDeveloperPermission()]
-        if self.request.method != 'GET':
+        # ToDo: Add permission to patch method for sr developer and project manager
+        # if self.request.method == "PATCH":
+        #     # object_list = [ProjectManagerPermission(), SrDeveloperPermission()]
+        #     return [ProjectManagerPermission() , SrDeveloperPermission()]
+
+        if self.request.method == 'POST':
             return [ProjectManagerPermission()]
         return permissions
