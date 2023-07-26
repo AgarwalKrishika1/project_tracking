@@ -59,6 +59,8 @@ CREATED_APPS = [
     'apps.users',
     'apps.projects',
     'apps.master',
+    'apps.base',
+    'apps.issues',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CREATED_APPS + THIRD_PARTY_APPS
