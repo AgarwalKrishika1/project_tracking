@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from apps.projects.models import Client, Projects, Developer
-from apps.users.models import UserProfile, User
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -21,15 +20,13 @@ class ClientSerializer(serializers.ModelSerializer):
 
 class ProjectsSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
-    project_manager = serializers.StringRelatedField()
+    # for creating and saving fk and showing name instead of id of fk
+    project_manager = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(),
+                                                         many=True), serializers.StringRelatedField()
+
     class Meta:
         model = Projects
         fields = '__all__'
-
-    # def to_representation(self, instance):
-    #     rep = super(ProjectsSerializer, self).to_representation(instance)
-    #     rep['category'] = instance.category.name
-    #     return rep
 
 
 class ProjectDeveloperSerializer(serializers.ModelSerializer):
