@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 class UserProfile(models.Model):
     class UserRole(models.TextChoices):
-        developer = 'developer', 'developer'
+        sr_developer = 'sr_developer', 'sr_developer'
+        jr_developer = 'jr_developer', 'jr_developer'
         project_manager = 'project_manager', 'project_manager'
 
     class Gender(models.TextChoices):
@@ -13,12 +14,12 @@ class UserProfile(models.Model):
         female = 'female', 'female',
         others = 'others', 'others'
 
-    role = models.CharField(choices=UserRole.choices)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile = models.CharField()
     address = models.JSONField(null=True, blank=True)
     avatar = models.ImageField(upload_to='avatar', null=True, blank=True)
     gender = models.CharField(choices=Gender.choices)
+    role = models.CharField(choices=UserRole.choices)
 
     class Meta:
         db_table = 'user_profile'

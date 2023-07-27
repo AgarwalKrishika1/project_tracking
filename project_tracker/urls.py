@@ -42,12 +42,13 @@ urlpatterns = [
     # path('users/create/', UserCreateView.as_view(), name='user-create'),
     path("user/", include('apps.users.urls'), name='user'),
     path("clients/", include('apps.projects.urls'), name='clients'),
+    path("issues/", include('apps.issues.urls'), name='issues'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
-# urlpatterns += [
-#     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-#     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-#     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
-# ]
+urlpatterns += [
+    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
+]
