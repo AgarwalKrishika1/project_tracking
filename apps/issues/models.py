@@ -28,8 +28,8 @@ class IssuesModel(models.Model):
     type = models.CharField(choices=IssueType.choices)
     status = models.CharField(choices=IssueStatus.choices)
     priority = models.CharField(choices=IssuePriority.choices)
-    projects = models.ForeignKey(Projects, related_name='projects', on_delete= models.CASCADE, null=True)
-    users = models.ManyToManyField(UserProfile, related_name='users')
+    project = models.ForeignKey(Projects, related_name='project', on_delete= models.CASCADE, null=True)
+    users = models.ManyToManyField(UserProfile, related_name='users', default=[])
 
     class Meta:
         db_table = 'issue'
