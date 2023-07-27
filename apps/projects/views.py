@@ -3,7 +3,9 @@ from apps.projects.models import Client, Projects, Developer
 from apps.projects.serializer import ClientSerializer, ProjectsSerializer, ProjectDeveloperSerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from apps.users.models import User
+from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission, JrDeveloperPermission
+from rest_framework.permissions import IsAuthenticated
+
 
 class ProjectDeveloperViewSet(ModelViewSet):
     queryset = Developer.objects.all()
@@ -21,5 +23,16 @@ class ProjectsViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["category", "status", "project_manager"]
     search_fields = ["name"]
+    allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
 
-
+    def get_permissions(self):
+        perm_list = [IsAuthenticated]
+        if self.request.method == "PATCH":
+            perm_list.append(
+                SrDeveloperPermission | ProjectManagerPermission
+            )
+        if self.request.method == 'POST':
+            perm_list.append(
+               ProjectManagerPermission
+            )
+        return [permission() for permission in perm_list]
