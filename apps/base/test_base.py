@@ -36,6 +36,7 @@ class BaseTestCase(APITestCase):
                                           password=SR_DEVELOPER_PASSWORD, role="sr_developer")
         jr_developer = create_userprofile(username=JR_DEVELOPER_USER, email=JR_DEVELOPER_EMAIL,
                                           password=JR_DEVELOPER_PASSWORD, role="jr_developer")
+        cls.project_manager_userprofile = project_manager
 
     def setUp(self) -> None:
         super(BaseTestCase, self).setUp()
