@@ -110,3 +110,27 @@ class IssueFilterTestCase(IssueTestCase):
         response = self.authorized_srd.get(url)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_search_filter_on_title_unauthorised(self):
+        res = self.create_issue()
+        url = "/issues/" + f"?title=issue trial"
+        response = self.unauthorized_srd.get(url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_search_filter_on_priority_unauthorised(self):
+        res = self.create_issue()
+        url = "/issues/" + f"?priority=medium"
+        response = self.unauthorized_srd.get(url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_search_filter_on_status_unauthorised(self):
+        res = self.create_issue()
+        url = "/issues/" + f"?status=in_progress"
+        response = self.unauthorized_srd.get(url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_search_filter_on_type_unauthorised(self):
+        res = self.create_issue()
+        url = "/issues/" + f"?type=task"
+        response = self.unauthorized_srd.get(url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
