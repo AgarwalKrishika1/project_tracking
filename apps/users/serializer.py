@@ -17,9 +17,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         password = self.context.get('password')
         email = self.context.get('email')
         user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
-        user_profile = UserProfile(user_id=user.id, **validated_data)
-        user_profile.save()
+        user_profile = UserProfile.objects.create(user_id=user.id, **validated_data)
         return user_profile
 
     class Meta:
