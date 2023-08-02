@@ -1,11 +1,8 @@
-from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
-from apps.users.models import User, UserProfile
+from rest_framework.permissions import IsAuthenticated, BasePermission
 
 
 class AdminPermission(IsAuthenticated):
-    # def has_permission(self, request, view):
-    #     return bool(request.user.userprofile.UserRole == "admin")
+
     def has_permission(self, request, view):
         print(request.user)
         if request.user.is_superuser:
@@ -17,8 +14,6 @@ class AdminPermission(IsAuthenticated):
 
 
 class ProjectManagerPermission(AdminPermission):
-    # def has_permission(self, request, view):
-    #     return bool(request.user.userprofile.UserRole == "project_manager")
 
     def has_permission(self, request, view):
         default_permission = super().has_permission(request=request, view=view)
@@ -43,3 +38,13 @@ class JrDeveloperPermission(AdminPermission):
         if default_permission or request.user.userprofile.role == 'jr_developer':
             return True
         return False
+
+
+class IsAuthenticatedOrPostOnly(BasePermission):
+    def has_permission(self, request, view):
+        # Allow unauthenticated access for POST requests
+        if request.method == 'POST':
+            return True
+        # Authenticate other requests using IsAuthenticated
+        return IsAuthenticated().has_permission(request, view)
+
