@@ -23,6 +23,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             user.save()
             user_profile = UserProfile(user_id=user.id, **validated_data)
             user_profile.save()
+
         return user_profile
 
     class Meta:
