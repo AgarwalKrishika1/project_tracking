@@ -61,6 +61,7 @@ CREATED_APPS = [
     'apps.master',
     'apps.base',
     'apps.issues',
+    'apps.comments',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CREATED_APPS + THIRD_PARTY_APPS
