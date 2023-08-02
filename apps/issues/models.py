@@ -1,10 +1,9 @@
 from django.db import models
 from apps.projects.models import Projects
 from apps.users.models import UserProfile
-# Create your models here.
 
 
-class IssuesModel(models.Model):
+class Issues(models.Model):
     class IssueType(models.TextChoices):
         task = 'task', 'task'
         bug = 'bug', 'bug'
@@ -28,8 +27,8 @@ class IssuesModel(models.Model):
     type = models.CharField(choices=IssueType.choices)
     status = models.CharField(choices=IssueStatus.choices)
     priority = models.CharField(choices=IssuePriority.choices)
-    projects = models.ForeignKey(Projects, related_name='projects', on_delete= models.CASCADE, null=True)
-    users = models.ManyToManyField(UserProfile, related_name='users')
+    projects = models.ForeignKey(Projects, related_name='projects', on_delete=models.CASCADE, null=True)
+    users = models.ManyToManyField(UserProfile, related_name='users', null=True, blank=True)
 
     class Meta:
         db_table = 'issue'
