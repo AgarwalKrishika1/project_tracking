@@ -1,23 +1,10 @@
-from rest_framework import status, generics
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.viewsets import ModelViewSet
-from apps.users.serializer import UserProfileSerializer, UserSerializer
-from apps.users.models import UserProfile, User
-from rest_framework.permissions import IsAuthenticated, BasePermission
+from apps.users.serializer import UserProfileSerializer
+from apps.users.models import UserProfile
+from apps.base.permissions import IsAuthenticatedOrPostOnly
 
 
-# Create your views here.
-
-class IsAuthenticatedOrPostOnly(BasePermission):
-    def has_permission(self, request, view):
-        # Allow unauthenticated access for POST requests
-        if request.method == 'POST':
-            return True
-        # Authenticate other requests using IsAuthenticated
-        return IsAuthenticated().has_permission(request, view)
-
-
-class UserProfileModelView(ModelViewSet):
+class UserProfileViewSet(ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticatedOrPostOnly]
@@ -34,8 +21,3 @@ class UserProfileModelView(ModelViewSet):
             }
         )
         return context
-
-
-class UserCreateView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
