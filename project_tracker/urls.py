@@ -21,8 +21,6 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView,)
 
-from apps.users.views import UserCreateView
-
 schema_view = get_schema_view(
     openapi.Info(
         title="project_tracker",
@@ -39,10 +37,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('users/create/', UserCreateView.as_view(), name='user-create'),
     path("user/", include('apps.users.urls'), name='user'),
     path("clients/", include('apps.projects.urls'), name='clients'),
     path("issues/", include('apps.issues.urls'), name='issues'),
+    path("comments/", include('apps.comments.urls'), name='comments'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
