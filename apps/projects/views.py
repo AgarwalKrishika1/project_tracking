@@ -3,7 +3,7 @@ from apps.projects.models import Client, Projects, Developer
 from apps.projects.serializer import ClientSerializer, ProjectsSerializer, ProjectDeveloperSerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission, JrDeveloperPermission
+from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission
 from rest_framework.permissions import IsAuthenticated
 
 

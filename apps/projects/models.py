@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from apps.users.models import User, UserProfile
 from apps.master.models import ProjectCategory
+from apps.base.models import Base
 
 
 class ProjectStatus(Enum):
@@ -17,14 +18,6 @@ class ProjectStatus(Enum):
         return [(i.value, i.name) for i in cls]
 
 
-class Base(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
 class Projects(Base):
     def validate_project_manager_role(value):
         if value and not UserProfile.objects.filter(id=value.id, role='project_manager').exists():
@@ -36,6 +29,7 @@ class Projects(Base):
     status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(),
                               default=ProjectStatus.INACTIVE.value)
     logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
+
     project_manager = models.ForeignKey(UserProfile, related_name='project_manager', on_delete=models.SET_NULL,
                                         null=True, validators=[validate_project_manager_role])
 

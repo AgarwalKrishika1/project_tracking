@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.issues.models import IssuesModel
+from apps.issues.models import Issues
 from apps.users.models import UserProfile
 from apps.projects.models import Projects
 
@@ -11,5 +11,5 @@ class IssueSerializer(serializers.ModelSerializer):
                                               many=True), serializers.StringRelatedField()
 
     class Meta:
-        model = IssuesModel
-        fields = '__all__'
+        model = Issues
+        fields = ['title', 'description', 'type', 'status', 'priority', 'projects', 'users']

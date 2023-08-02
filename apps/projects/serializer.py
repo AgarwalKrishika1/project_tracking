@@ -26,10 +26,11 @@ class ProjectsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Projects
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'category', 'status', 'logo', 'project_manager', 'created_at',
+                  'updated_at']
 
 
 class ProjectDeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
-        fields = '__all__'
+        fields = ['id', 'project', 'user']
