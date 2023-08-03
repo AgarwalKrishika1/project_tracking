@@ -4,12 +4,12 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 class AdminPermission(IsAuthenticated):
 
     def has_permission(self, request, view):
-        print(request.user)
+        # print(request.user)
         if request.user.is_superuser:
-            print('has_permission true')
+            # print('has_permission true')
             return True
 
-        print('has_permission false')
+        # print('has_permission false')
         return False
 
 

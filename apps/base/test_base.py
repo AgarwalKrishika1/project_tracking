@@ -1,5 +1,3 @@
-from django.urls import reverse
-
 from apps.base.functions import create_userprofile
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
