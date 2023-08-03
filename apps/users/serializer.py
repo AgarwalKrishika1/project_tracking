@@ -1,5 +1,3 @@
-from django.db import transaction
-
 from apps.users.models import UserProfile
 from django.contrib.auth.models import User
 from rest_framework import serializers

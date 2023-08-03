@@ -17,6 +17,10 @@ class ProjectStatus(Enum):
 
 
 class Projects(Base):
+    def validate_project_manager_role(value):
+        if value and not UserProfile.objects.filter(id=value.id, role='project_manager').exists():
+            raise ValidationError("The selected project manager does not have the 'manager' role.")
+
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     category = models.ForeignKey(ProjectCategory, on_delete=models.SET_NULL, null=True)

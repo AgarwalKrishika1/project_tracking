@@ -1,6 +1,7 @@
 from django.db import models
 from apps.projects.models import Projects
 from apps.users.models import UserProfile
+# Create your models here.
 
 
 class Issues(models.Model):
