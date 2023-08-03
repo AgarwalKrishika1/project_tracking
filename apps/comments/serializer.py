@@ -1,4 +1,4 @@
-from apps.comments.models import Comment
+from apps.comments import Comment
 from rest_framework import serializers
 from apps.users.models import UserProfile
 from apps.issues.models import Issues
