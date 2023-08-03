@@ -10,7 +10,6 @@ class ProjectTestCase(BaseTestCase):
             "description": "testing",
             "project_manager": self.project_manager_userprofile.id
         }
-        print(data)
         response = self.authorized_pm.post("/clients/projects/", data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         return response
@@ -21,7 +20,6 @@ class ProjectTestCase(BaseTestCase):
 
         # converts byte data string using json.loads()
         data = json.loads(response.content)
-        print("Response Data:", data)
         self.assertEqual(len(data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -99,7 +97,6 @@ class ProjectFilterTestCase(ProjectTestCase):
         url = "/clients/projects/" + f"?status=ACTIVE"
         response = self.authorized_srd.get(url)
         data = json.loads(response.content)
-        print("Response Data:", data)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

@@ -1,5 +1,7 @@
 from enum import Enum
 from django.db import models
+from rest_framework.exceptions import ValidationError
+
 from apps.users.models import User, UserProfile
 from apps.master.models import ProjectCategory
 from apps.base.models import Base
@@ -28,7 +30,8 @@ class Projects(Base):
                               default=ProjectStatus.INACTIVE.value)
     logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
     project_manager = models.ForeignKey(UserProfile, related_name='project_manager',
-                                        on_delete=models.SET_NULL, null=True)
+                                        on_delete=models.SET_NULL, null=True,
+                                        validators=[validate_project_manager_role])
 
     def __str__(self):
         return self.name
