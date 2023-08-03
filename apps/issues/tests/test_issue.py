@@ -19,7 +19,6 @@ class IssueTestCase(BaseTestCase):
         res = self.create_issue()
         response = self.authorized_pm.get("/issues/")
         data = json.loads(response.content)
-        print("Response Data:", data)
         self.assertEqual(len(data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -78,7 +77,8 @@ class IssueTestCase(BaseTestCase):
 
     def test_delete_with_unauthorised(self):
         res = self.create_issue()
-        response = self.unauthorized_admin.delete(f"/issues/{res.data.get('id')}/")
+        url = f"/issues/{res.data.get('id')}/"
+        response = self.unauthorized_admin.delete(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
