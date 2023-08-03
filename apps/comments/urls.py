@@ -1,5 +1,5 @@
 from django.urls import path, include
-from apps.comments import CommentViewSet
+from apps.comments.views import CommentViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
