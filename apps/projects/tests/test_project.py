@@ -17,10 +17,9 @@ class ProjectTestCase(BaseTestCase):
     def test_get_projects(self):
         res = self.create_project()
         response = self.authorized_pm.get("/clients/projects/")
-
         # converts byte data string using json.loads()
         data = json.loads(response.content)
-        self.assertEqual(len(data), 1)
+        self.assertEqual(len(data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_with_unauthorised(self):
@@ -52,7 +51,6 @@ class ProjectTestCase(BaseTestCase):
         response = self.authorized_pm.patch(f"/clients/projects/{res.data.get('id')}/", data=data,
                                             format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.authorized_pm.get("/clients/projects/")
         self.assertContains(response, '"name":"test123"')
 
     def test_update_with_jr_developer(self):
@@ -97,21 +95,21 @@ class ProjectFilterTestCase(ProjectTestCase):
         url = "/clients/projects/" + f"?status=ACTIVE"
         response = self.authorized_srd.get(url)
         data = json.loads(response.content)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_on_pm(self):
         self.test_update_with_pm()
         url = "/clients/projects/" + f"?project_manager={self.project_manager_userprofile.id}"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_filter_on_name(self):
         res = self.create_project()
         url = "/clients/projects/" + f"?name=tests"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_filter_on_name_unauthorised(self):

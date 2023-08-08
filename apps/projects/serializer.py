@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from apps.projects.models import Client, Projects, Developer
 from apps.users.serializer import UserProfileSerializer
+
+
 class ClientSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -32,7 +34,9 @@ class ProjectsSerializer(serializers.ModelSerializer):
 class ProjectsReadOnlySerialzier(serializers.ModelSerializer):
     def create(self, validated_data):
         pass
+
     project_manager = UserProfileSerializer()
+
     class Meta:
         model = Projects
         fields = ['id', 'name', 'description', 'category', 'status', 'logo', 'project_manager', 'created_at',
