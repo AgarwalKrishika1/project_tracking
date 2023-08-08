@@ -2,4 +2,9 @@ from django.contrib import admin
 from apps.issues import models
 
 
-admin.site.register(models.Issues)
+class IssueAdminFilter(admin.ModelAdmin):
+    list_filter = ('type', 'status', 'priority')
+    search_fields = ['title']
+
+
+admin.site.register(models.Issues, IssueAdminFilter)

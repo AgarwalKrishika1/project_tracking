@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from apps.issues.models import Issues
 from apps.users.models import UserProfile
-from apps.projects.models import Projects
+from apps.users.serializer import UserProfileSerializer
 from apps.projects.serializer import ProjectsSerializer, ProjectsReadOnlySerialzier
 
 
@@ -18,6 +18,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
 class IssueReadOnlySerializer(serializers.ModelSerializer):
     projects = ProjectsReadOnlySerialzier()
+    users = UserProfileSerializer(many=True)
 
     class Meta:
         model = Issues

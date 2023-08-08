@@ -15,11 +15,44 @@ class IssueTestCase(BaseTestCase):
         response = self.authorized_pm.post("/issues/", data=data, format='json')
         return response
 
-    def test_get_issue(self):
+    def create_issue_with_unauthorised(self):
+        data = {
+            "title": "issue trial",
+            "description": "issues trial",
+            "type": "task",
+            "status": "in_progress",
+            "priority": "medium"
+        }
+        response = self.unauthorized_pm.post("/issues/", data=data, format='json')
+        return response
+
+    def update_issue_with_authorised(self):
+        data = {
+            "title": "issue123",
+            "description": "issues trial",
+            "type": "task",
+            "status": "in_progress",
+            "priority": "medium"
+        }
+        response = self.authorized_pm.post("/issues/", data=data, format='json')
+        return response
+
+    def update_issue_with_unauthorised(self):
+        data = {
+            "title": "issue123",
+            "description": "issues trial",
+            "type": "task",
+            "status": "in_progress",
+            "priority": "medium"
+        }
+        response = self.unauthorized_pm.post("/issues/", data=data, format='json')
+        return response
+
+    def test_get_issue_authorised(self):
         res = self.create_issue()
         response = self.authorized_pm.get("/issues/")
         data = json.loads(response.content)
-        self.assertEqual(len(data), 1)
+        self.assertEqual(len(data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_issue_with_unauthorised(self):
@@ -34,40 +67,18 @@ class IssueTestCase(BaseTestCase):
         self.assertContains(response, '"title":"issue trial"')
 
     def test_create_with_unauthorised(self):
-        data = {
-            "title": "issue trial",
-            "description": "issues trial",
-            "type": "task",
-            "status": "in_progress",
-            "priority": "medium"
-        }
-        response = self.unauthorized_pm.post("/issues/", data=data, format='json')
+        response = self.create_issue_with_unauthorised()
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_with_authorised(self):
-        res = self.create_issue()
-        data = {
-            "title": "issue123",
-            "description": "issues trial",
-            "type": "task",
-            "status": "in_progress",
-            "priority": "medium"
-        }
-        response = self.authorized_pm.patch(f"/issues/{res.data.get('id')}/", data=data, format='json')
+        res = self.update_issue_with_authorised()
+        response = self.authorized_pm.patch(f"/issues/{res.data.get('id')}/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.authorized_pm.get("/issues/")
         self.assertContains(response, '"title":"issue123"')
 
     def test_update_with_unauthorised(self):
-        res = self.create_issue()
-        data = {
-            "title": "issue123",
-            "description": "issues trial",
-            "type": "task",
-            "status": "in_progress",
-            "priority": "medium"
-        }
-        response = self.unauthorized_pm.patch(f"/issues/{res.data.get('id')}/", data=data, format='json')
+        res = self.update_issue_with_unauthorised()
+        response = self.unauthorized_pm.patch(f"/issues/{res.data.get('id')}/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_with_authorised(self):
@@ -87,28 +98,28 @@ class IssueFilterTestCase(IssueTestCase):
         res = self.create_issue()
         url = "/issues/" + f"?type=task"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_on_status(self):
         res = self.create_issue()
         url = "/issues/" + f"?status=in_progress"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_on_priority(self):
         res = self.create_issue()
         url = "/issues/" + f"?priority=medium"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_filter_on_title(self):
         res = self.create_issue()
         url = "/issues/" + f"?title=issue trial"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_filter_on_title_unauthorised(self):
