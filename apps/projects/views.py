@@ -9,6 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import CursorPagination
 
 
+class CursorPaginationWithOrder(CursorPagination):
+    page_size = 100
+    ordering = 'status'
+
+
 class ProjectDeveloperViewSet(ModelViewSet):
     queryset = Developer.objects.all()
     serializer_class = ProjectDeveloperSerializer
@@ -25,6 +30,7 @@ class ProjectsViewSet(ModelViewSet):
     filterset_fields = ["category", "status", "project_manager"]
     search_fields = ["name"]
     allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+    pagination_class = CursorPaginationWithOrder
 
     def get_permissions(self):
         perm_list = [IsAuthenticated]
@@ -42,7 +48,3 @@ class ProjectsViewSet(ModelViewSet):
         if self.request.method == "GET":
             return ProjectsReadOnlySerialzier
         return ProjectsSerializer
-
-
-class CursorPaginationWithOrder(CursorPagination):
-    ordering = 'id'
