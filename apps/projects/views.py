@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
-from apps.projects.models import Client, Projects, Developer
-from apps.projects.serializer import ClientSerializer, ProjectsSerializer, ProjectDeveloperSerializer, \
-    ProjectsReadOnlySerialzier
+from apps.projects.models import Client, Project, Developer
+from apps.projects.serializer import ClientSerializer, ProjectSerializer, ProjectDeveloperSerializer, \
+    ProjectReadOnlySerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission
@@ -24,8 +24,8 @@ class ClientViewSet(ModelViewSet):
     serializer_class = ClientSerializer
 
 
-class ProjectsViewSet(ModelViewSet):
-    queryset = Projects.objects.all()
+class ProjectViewSet(ModelViewSet):
+    queryset = Project.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["category", "status", "project_manager"]
     search_fields = ["name"]
@@ -46,5 +46,5 @@ class ProjectsViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return ProjectsReadOnlySerialzier
-        return ProjectsSerializer
+            return ProjectReadOnlySerializer
+        return ProjectSerializer

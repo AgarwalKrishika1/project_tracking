@@ -18,7 +18,7 @@ class ProjectStatus(Enum):
         return [(i.value, i.name) for i in cls]
 
 
-class Projects(Base):
+class Project(Base):
     def validate_project_manager_role(value):
         if value and not UserProfile.objects.filter(id=value.id, role='project_manager').exists():
             raise ValidationError("The selected project manager does not have the 'manager' role.")
@@ -37,7 +37,7 @@ class Projects(Base):
         return self.name
 
     class Meta:
-        db_table = 'projects'
+        db_table = 'project'
         verbose_name = 'Project'
         verbose_name_plural = 'Projects'
 
@@ -46,17 +46,17 @@ class Client(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     mobile = models.IntegerField()
-    projects = models.ManyToManyField(Projects)
+    projects = models.ManyToManyField(Project)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        db_table = 'clients'
+        db_table = 'client'
 
 
 class Developer(models.Model):
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
