@@ -60,9 +60,13 @@ class IssueTestCase(BaseTestCase):
             "status": "in_progress",
             "priority": "medium"
         }
-        response = self.authorized_pm.patch(f"/issues/{res.data.get('id')}/", data=data, format='json')
+        data_json = json.dumps(data)
+        response = self.authorized_pm.patch(f"/issues/{res.data.get('id')}/", data=data_json,
+                                            content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertContains(response, '"title":"issue123"')
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data['title'], "issue123")
+        # self.assertContains(response, '"title":"issue123"')
 
     def test_update_with_unauthorised(self):
         res = self.create_issue()
@@ -95,28 +99,32 @@ class IssueFilterTestCase(IssueTestCase):
         res = self.create_issue()
         url = "/issues/" + f"?type=task"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data['results']), 1)
+        data = json.loads(response.content)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_on_status(self):
         res = self.create_issue()
         url = "/issues/" + f"?status=in_progress"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data['results']), 1)
+        data = json.loads(response.content)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_on_priority(self):
         res = self.create_issue()
         url = "/issues/" + f"?priority=medium"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data['results']), 1)
+        data = json.loads(response.content)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_filter_on_title(self):
         res = self.create_issue()
         url = "/issues/" + f"?title=issue trial"
         response = self.authorized_srd.get(url)
-        self.assertEqual(len(response.data['results']), 1)
+        data = json.loads(response.content)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_filter_on_title_unauthorised(self):
