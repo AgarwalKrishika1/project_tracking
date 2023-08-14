@@ -9,6 +9,10 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'text', 'created_by', 'issue', 'created_at', 'updated_at']
 
+    def delete(self, instance):
+        instance.is_delete = True
+        instance.save()
+
 
 class CommentReadOnlySerializer(serializers.ModelSerializer):
     created_by = UserProfileSerializer()
@@ -17,8 +21,3 @@ class CommentReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'text', 'created_by', 'issue', 'created_at', 'updated_at', 'is_delete']
-
-    def delete(self, instance):
-        instance.is_delete = True
-        instance.save()
-
