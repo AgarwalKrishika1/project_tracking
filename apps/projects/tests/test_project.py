@@ -10,7 +10,8 @@ class ProjectTestCase(BaseTestCase):
             "description": "testing",
             "project_manager": self.project_manager_userprofile.id
         }
-        response = self.authorized_pm.post("/clients/project/", data=data, format='json')
+        data_json = json.dumps(data)
+        response = self.authorized_pm.post("/clients/project/", data=data_json, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         return response
 
@@ -38,7 +39,8 @@ class ProjectTestCase(BaseTestCase):
             "name": "tests",
             "description": "testing",
         }
-        response = self.authorized_srd.post("/clients/project/", data=data, format='json')
+        data_json = json.dumps(data)
+        response = self.authorized_srd.post("/clients/project/", data=data_json, content_type='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_with_pm(self):
@@ -48,8 +50,9 @@ class ProjectTestCase(BaseTestCase):
             "description": "testing",
             "status": "ACTIVE",
         }
-        response = self.authorized_pm.patch(f"/clients/project/{res.data.get('id')}/", data=data,
-                                            format='json')
+        data_json = json.dumps(data)
+        response = self.authorized_pm.patch(f"/clients/project/{res.data.get('id')}/", data=data_json,
+                                            content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, '"name":"test123"')
 
@@ -59,8 +62,9 @@ class ProjectTestCase(BaseTestCase):
             "name": "test123",
             "description": "testing",
         }
-        response = self.authorized_jrd.patch(f"/clients/project/{res.data.get('id')}/", data=data,
-                                             format='json')
+        data_json = json.dumps(data)
+        response = self.authorized_jrd.patch(f"/clients/project/{res.data.get('id')}/", data=data_json,
+                                             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_with_unauthorised(self):
@@ -69,8 +73,9 @@ class ProjectTestCase(BaseTestCase):
             "name": "test123",
             "description": "testing",
         }
-        response = self.unauthorized_pm.patch(f"/clients/project/{res.data.get('id')}/", data=data,
-                                              format='json')
+        data_json = json.dumps(data)
+        response = self.unauthorized_pm.patch(f"/clients/project/{res.data.get('id')}/", data=data_json,
+                                              content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_with_pm(self):
