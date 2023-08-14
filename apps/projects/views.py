@@ -29,7 +29,6 @@ class ProjectViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["category", "status", "project_manager"]
     search_fields = ["name"]
-    allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
     pagination_class = CursorPaginationWithOrder
 
     def get_permissions(self):
