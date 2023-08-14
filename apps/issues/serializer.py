@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from apps.issues.models import Issues
+from apps.issues.models import Issue
 from apps.users.models import UserProfile
 from apps.users.serializer import UserProfileSerializer
-from apps.projects.serializer import ProjectsSerializer, ProjectsReadOnlySerialzier
+from apps.projects.serializer import ProjectSerializer, ProjectReadOnlySerializer
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -12,14 +12,14 @@ class IssueSerializer(serializers.ModelSerializer):
                                               many=True), serializers.StringRelatedField()
 
     class Meta:
-        model = Issues
+        model = Issue
         fields = ['id', 'title', 'description', 'type', 'status', 'priority', 'projects', 'users']
 
 
 class IssueReadOnlySerializer(serializers.ModelSerializer):
-    projects = ProjectsReadOnlySerialzier()
+    projects = ProjectReadOnlySerializer()
     users = UserProfileSerializer(many=True)
 
     class Meta:
-        model = Issues
+        model = Issue
         fields = ['id', 'title', 'description', 'type', 'status', 'priority', 'projects', 'users']

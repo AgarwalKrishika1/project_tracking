@@ -12,7 +12,8 @@ class IssueTestCase(BaseTestCase):
             "status": "in_progress",
             "priority": "medium"
         }
-        response = self.authorized_pm.post("/issues/", data=data, format='json')
+        data_json = json.dumps(data)
+        response = self.authorized_pm.post("/issues/", data=data_json, content_type="application/json")
         return response
 
     def create_issue_with_unauthorised(self):
@@ -23,36 +24,15 @@ class IssueTestCase(BaseTestCase):
             "status": "in_progress",
             "priority": "medium"
         }
-        response = self.unauthorized_pm.post("/issues/", data=data, format='json')
-        return response
-
-    def update_issue_with_authorised(self):
-        data = {
-            "title": "issue123",
-            "description": "issues trial",
-            "type": "task",
-            "status": "in_progress",
-            "priority": "medium"
-        }
-        response = self.authorized_pm.post("/issues/", data=data, format='json')
-        return response
-
-    def update_issue_with_unauthorised(self):
-        data = {
-            "title": "issue123",
-            "description": "issues trial",
-            "type": "task",
-            "status": "in_progress",
-            "priority": "medium"
-        }
-        response = self.unauthorized_pm.post("/issues/", data=data, format='json')
+        data_json = json.dumps(data)
+        response = self.unauthorized_pm.post("/issues/", data=data_json, content_type="application/json")
         return response
 
     def test_get_issue_authorised(self):
         res = self.create_issue()
         response = self.authorized_pm.get("/issues/")
         data = json.loads(response.content)
-        self.assertEqual(len(data['results']), 1)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_issue_with_unauthorised(self):
@@ -64,6 +44,7 @@ class IssueTestCase(BaseTestCase):
         res = self.create_issue()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         response = self.authorized_pm.get("/issues/")
+        data = json.loads(response.content)
         self.assertContains(response, '"title":"issue trial"')
 
     def test_create_with_unauthorised(self):
@@ -71,14 +52,30 @@ class IssueTestCase(BaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_with_authorised(self):
-        res = self.update_issue_with_authorised()
-        response = self.authorized_pm.patch(f"/issues/{res.data.get('id')}/")
+        res = self.create_issue()
+        data = {
+            "title": "issue123",
+            "description": "issues trial",
+            "type": "task",
+            "status": "in_progress",
+            "priority": "medium"
+        }
+        response = self.authorized_pm.patch(f"/issues/{res.data.get('id')}/", data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, '"title":"issue123"')
 
     def test_update_with_unauthorised(self):
-        res = self.update_issue_with_unauthorised()
-        response = self.unauthorized_pm.patch(f"/issues/{res.data.get('id')}/")
+        res = self.create_issue()
+        data = {
+            "title": "issue123",
+            "description": "issues trial",
+            "type": "task",
+            "status": "in_progress",
+            "priority": "medium"
+        }
+        data_json = json.dumps(data)
+        response = self.unauthorized_pm.patch(f"/issues/{res.data.get('id')}/", data=data_json,
+                                              content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_with_authorised(self):

@@ -7,4 +7,4 @@ class IssueAdminFilter(admin.ModelAdmin):
     search_fields = ['title']
 
 
-admin.site.register(models.Issues, IssueAdminFilter)
+admin.site.register(models.Issue, IssueAdminFilter)
