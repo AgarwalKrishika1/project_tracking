@@ -47,7 +47,7 @@ class CommentTest(BaseTestCase):
         res = self.create_comment()
         response = self.authorized_pm.get("/comments/")
         data = json.loads(response.content)
-        self.assertEqual(len(data['results']), 1)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_comment_with_unauthorised(self):
@@ -74,7 +74,9 @@ class CommentTest(BaseTestCase):
         response = self.authorized_pm.patch(f"/comments/{res.data.get('id')}/", data=data_json,
                                             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertContains(response, '"text":"comment1"')
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data['text'], "comment1")
+        # self.assertContains(response, '"text":"comment1"')
 
     def test_update_with_unauthorised(self):
         res = self.create_comment()
@@ -106,7 +108,7 @@ class TestCommentFilter(CommentTest):
         url = f"/comments/?text=comment1"
         response = self.authorized_pm.get(url)
         data = json.loads(response.content)
-        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_text_unauthorised(self):
@@ -120,7 +122,7 @@ class TestCommentFilter(CommentTest):
         url = "/comments/" + f"?created_by={self.project_manager_userprofile.id}"
         response = self.authorized_pm.get(url)
         data = json.loads(response.content)
-        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(len(data.get('results')), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_filter_created_by_unauthorised(self):
