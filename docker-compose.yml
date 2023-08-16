@@ -1,0 +1,41 @@
+version: "3.14"
+
+services:
+  web:
+    build: .
+    command: sh -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver"
+    env_file:
+      - .env.docker
+#    image: imagetrial
+    expose:
+      - 8000 # retrieved from the .env file
+
+    restart: "on-failure"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+
+  db:
+    # image name of the postgres database. during build, this will be pulled from dockerhub and a container spun up from it.
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=project_track
+      - PGPORT=5432
+      - POSTGRES_USER=postgres
+    networks:
+      - backend
+    restart: "on-failure"
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    driver: bridge
