@@ -1,10 +1,17 @@
 from rest_framework.viewsets import ModelViewSet
-from apps.projects.models import Client, Projects, Developer
-from apps.projects.serializer import ClientSerializer, ProjectsSerializer, ProjectDeveloperSerializer
+from apps.projects.models import Client, Project, Developer
+from apps.projects.serializer import ClientSerializer, ProjectSerializer, ProjectDeveloperSerializer, \
+    ProjectReadOnlySerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.base.permissions import ProjectManagerPermission, SrDeveloperPermission
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import CursorPagination
+
+
+class CursorPaginationWithOrder(CursorPagination):
+    page_size = 100
+    ordering = 'status'
 
 
 class ProjectDeveloperViewSet(ModelViewSet):
@@ -17,13 +24,12 @@ class ClientViewSet(ModelViewSet):
     serializer_class = ClientSerializer
 
 
-class ProjectsViewSet(ModelViewSet):
-    queryset = Projects.objects.all()
-    serializer_class = ProjectsSerializer
+class ProjectViewSet(ModelViewSet):
+    queryset = Project.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["category", "status", "project_manager"]
     search_fields = ["name"]
-    allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+    pagination_class = CursorPaginationWithOrder
 
     def get_permissions(self):
         perm_list = [IsAuthenticated]
@@ -33,6 +39,11 @@ class ProjectsViewSet(ModelViewSet):
             )
         if self.request.method == 'POST':
             perm_list.append(
-               ProjectManagerPermission
+                ProjectManagerPermission
             )
         return [permission() for permission in perm_list]
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ProjectReadOnlySerializer
+        return ProjectSerializer

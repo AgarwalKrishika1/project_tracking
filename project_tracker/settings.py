@@ -164,11 +164,13 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': env.int('PAGE_SIZE')
 }
 # MEDIA
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = env.str('MEDIA_URL')
 
 # LOGGERS
 LOG_DIR = os.path.join(BASE_DIR, "logs")
