@@ -31,6 +31,8 @@ services:
       - POSTGRES_USER=postgres
     networks:
       - backend
+    ports:
+      - "5433:5432"
     restart: "on-failure"
 
 volumes:
