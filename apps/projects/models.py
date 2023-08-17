@@ -29,13 +29,9 @@ class Project(Base):
     status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(),
                               default=ProjectStatus.INACTIVE.value)
     logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
-<<<<<<<<< Temporary merge branch 1
     project_manager = models.ForeignKey(UserProfile, related_name='project_manager', on_delete=models.SET_NULL,
                                         null=True, validators=[validate_project_manager_role])
-=========
-    project_manager = models.ForeignKey(UserProfile, related_name='project_manager',
-                                        on_delete=models.SET_NULL, null=True)
->>>>>>>>> Temporary merge branch 2
+
 
     def __str__(self):
         return self.name
