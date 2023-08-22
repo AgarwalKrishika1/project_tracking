@@ -32,7 +32,6 @@ class Project(Base):
     project_manager = models.ForeignKey(UserProfile, related_name='project_manager', on_delete=models.SET_NULL,
                                         null=True, validators=[validate_project_manager_role])
 
-
     def __str__(self):
         return self.name
 
@@ -55,9 +54,10 @@ class Client(models.Model):
         db_table = 'client'
 
 
-class Developer(models.Model):
+class ProjectUser(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Developer: {self.user.id}, Project: {self.project.id}"
