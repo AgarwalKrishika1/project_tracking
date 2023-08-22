@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.projects.models import Client, Project, Developer
+from apps.projects.models import Client, Project, ProjectUser
 from apps.users.serializer import UserProfileSerializer
 
 
@@ -43,7 +43,11 @@ class ProjectReadOnlySerializer(serializers.ModelSerializer):
                   'updated_at']
 
 
-class ProjectDeveloperSerializer(serializers.ModelSerializer):
+class ProjectUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Developer
-        fields = ['id', 'project', 'user']
+        model = ProjectUser
+        fields = ['id', 'project', 'user', 'isActive']
+
+    def delete(self, instance):
+        instance.isActive = False
+        instance.save()
