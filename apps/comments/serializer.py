@@ -21,3 +21,12 @@ class CommentReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'text', 'created_by', 'issue', 'created_at', 'updated_at', 'is_delete']
+
+
+class QuerySerializer(serializers.ModelSerializer):
+    created_by = UserProfileSerializer()
+    issue = IssueSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'text', 'created_by', 'issue', 'created_at', 'updated_at', 'is_delete']
