@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from apps.projects.models import Client, Project, Developer
-from apps.projects.serializer import ClientSerializer, ProjectSerializer, ProjectDeveloperSerializer, \
+from apps.projects.models import Client, Project, ProjectUser
+from apps.projects.serializer import ClientSerializer, ProjectSerializer, ProjectUserSerializer, \
     ProjectReadOnlySerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,8 +15,8 @@ class CursorPaginationWithOrder(CursorPagination):
 
 
 class ProjectDeveloperViewSet(ModelViewSet):
-    queryset = Developer.objects.all()
-    serializer_class = ProjectDeveloperSerializer
+    queryset = ProjectUser.objects.all()
+    serializer_class = ProjectUserSerializer
 
 
 class ClientViewSet(ModelViewSet):
@@ -47,3 +47,7 @@ class ProjectViewSet(ModelViewSet):
         if self.request.method == "GET":
             return ProjectReadOnlySerializer
         return ProjectSerializer
+
+    def get_queryset(self):
+        query = Project.objects.filter(name__startswith='p')
+        return query
