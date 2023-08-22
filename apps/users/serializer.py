@@ -1,5 +1,4 @@
 from django.db import transaction
-
 from apps.users.models import UserProfile
 from django.contrib.auth.models import User
 from rest_framework import serializers
@@ -20,11 +19,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             password = self.context.get('password')
             email = self.context.get('email')
             user = User.objects.create_user(username=username, email=email, password=password)
-            user.save()
             user_profile = UserProfile(user_id=user.id, **validated_data)
             user_profile.save()
-
-        return user_profile
+            return user_profile
 
     class Meta:
         model = UserProfile
@@ -38,5 +35,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'profile']
-
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'profile']

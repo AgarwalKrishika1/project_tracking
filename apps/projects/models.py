@@ -1,7 +1,7 @@
 from enum import Enum
-
-from django.core.exceptions import ValidationError
 from django.db import models
+from rest_framework.exceptions import ValidationError
+
 from apps.users.models import User, UserProfile
 from apps.master.models import ProjectCategory
 from apps.base.models import Base
@@ -18,7 +18,7 @@ class ProjectStatus(Enum):
         return [(i.value, i.name) for i in cls]
 
 
-class Projects(Base):
+class Project(Base):
     def validate_project_manager_role(value):
         if value and not UserProfile.objects.filter(id=value.id, role='project_manager').exists():
             raise ValidationError("The selected project manager does not have the 'manager' role.")
@@ -29,7 +29,6 @@ class Projects(Base):
     status = models.CharField(max_length=255, choices=ProjectStatus.project_status_choice(),
                               default=ProjectStatus.INACTIVE.value)
     logo = models.ImageField(upload_to='project_logo', null=True, blank=True)
-
     project_manager = models.ForeignKey(UserProfile, related_name='project_manager', on_delete=models.SET_NULL,
                                         null=True, validators=[validate_project_manager_role])
 
@@ -37,7 +36,7 @@ class Projects(Base):
         return self.name
 
     class Meta:
-        db_table = 'projects'
+        db_table = 'project'
         verbose_name = 'Project'
         verbose_name_plural = 'Projects'
 
@@ -46,18 +45,19 @@ class Client(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     mobile = models.IntegerField()
-    projects = models.ManyToManyField(Projects)
+    projects = models.ManyToManyField(Project)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        db_table = 'clients'
+        db_table = 'client'
 
 
-class Developer(models.Model):
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+class ProjectUser(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Developer: {self.user.id}, Project: {self.project.id}"

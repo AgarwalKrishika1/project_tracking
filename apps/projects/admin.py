@@ -9,4 +9,4 @@ class ProjectAdminFilter(admin.ModelAdmin):
 
 
 admin.site.register(models.Client)
-admin.site.register(models.Projects, ProjectAdminFilter)
+admin.site.register(models.Project, ProjectAdminFilter)

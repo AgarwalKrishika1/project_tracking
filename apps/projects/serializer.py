@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from apps.projects.models import Client, Projects, Developer
+from apps.projects.models import Client, Project, ProjectUser
+from apps.users.serializer import UserProfileSerializer
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -11,26 +12,42 @@ class ClientSerializer(serializers.ModelSerializer):
         print(data)
         return data
 
-    projects = serializers.PrimaryKeyRelatedField(many=True, queryset=Projects.objects.all())
+    projects = serializers.PrimaryKeyRelatedField(many=True, queryset=Project.objects.all())
 
     class Meta:
         model = Client
-        fields = ['name', 'mobile', 'email', 'projects']
+        fields = ['id', 'name', 'mobile', 'email', 'projects']
 
 
-class ProjectsSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
     # for creating and saving fk and showing name instead of id of fk
-    project_manager = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(),
+    project_manager = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(),
                                                          many=True), serializers.StringRelatedField()
 
     class Meta:
-        model = Projects
+        model = Project
         fields = ['id', 'name', 'description', 'category', 'status', 'logo', 'project_manager', 'created_at',
                   'updated_at']
 
 
-class ProjectDeveloperSerializer(serializers.ModelSerializer):
+class ProjectReadOnlySerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        pass
+
+    project_manager = UserProfileSerializer()
+
     class Meta:
-        model = Developer
-        fields = ['id', 'project', 'user']
+        model = Project
+        fields = ['id', 'name', 'description', 'category', 'status', 'logo', 'project_manager', 'created_at',
+                  'updated_at']
+
+
+class ProjectUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectUser
+        fields = ['id', 'project', 'user', 'isActive']
+
+    def delete(self, instance):
+        instance.isActive = False
+        instance.save()
