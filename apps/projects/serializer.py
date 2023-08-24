@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from apps.projects.models import Client, Project, ProjectUser
 from apps.users.serializer import UserProfileSerializer
 
@@ -44,6 +46,7 @@ class ProjectReadOnlySerializer(serializers.ModelSerializer):
 
 
 class ProjectUserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ProjectUser
         fields = ['id', 'project', 'user', 'isActive']
