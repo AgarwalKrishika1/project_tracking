@@ -1,5 +1,7 @@
 from django.db import models
-from apps.projects.models import Project
+from rest_framework.exceptions import ValidationError
+
+from apps.projects.models import Project, ProjectUser
 from apps.users.models import UserProfile
 
 

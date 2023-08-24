@@ -1,13 +1,15 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from apps.issues.models import Issue
 from apps.users.models import UserProfile
 from apps.users.serializer import UserProfileSerializer
-from apps.projects.serializer import ProjectSerializer, ProjectReadOnlySerializer
+from apps.projects.serializer import ProjectSerializer, ProjectReadOnlySerializer, ProjectUserSerializer
+from apps.projects.models import ProjectUser
 
 
 class IssueSerializer(serializers.ModelSerializer):
-    # projects = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(),
-    #                                               many=True), serializers.StringRelatedField()
+
     user = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all(),
                                               many=True), serializers.StringRelatedField()
 
