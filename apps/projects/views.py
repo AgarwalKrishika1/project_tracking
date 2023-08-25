@@ -18,12 +18,6 @@ class ProjectDeveloperViewSet(ModelViewSet):
     queryset = ProjectUser.objects.all()
     serializer_class = ProjectUserSerializer
 
-    # def get_serializer_context(self):
-    #     if self.request.method == "POST":
-    #         if self and not ProjectUser.objects.filter(user=self.request.data.get('user'),
-    #                                                    project=self.request.data.get('project')).exists():
-    #             raise ValueError("Error with user project ")
-
 
 class ClientViewSet(ModelViewSet):
     queryset = Client.objects.all()
