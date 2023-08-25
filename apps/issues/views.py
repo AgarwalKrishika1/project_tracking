@@ -5,6 +5,7 @@ from apps.issues.models import Issue
 from apps.issues.serializer import IssueSerializer, IssueReadOnlySerializer
 from apps.projects.models import ProjectUser
 
+
 class IssueViewSet(ModelViewSet):
     queryset = Issue.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -18,9 +19,14 @@ class IssueViewSet(ModelViewSet):
                                                        isActive=True).exists():
                 raise ValueError("Error with user project ")
 
+    def get_queryset(self):
+        if self.request.method == 'GET':
+            print(self.request.user.userprofile.mobile)
+            user_mobile = self.request.user.userprofile.mobile
+            query = Issue.objects.filter(users__mobile=user_mobile)
+            return query
+
     def get_serializer_class(self):
         if self.request.method == "GET":
             return IssueReadOnlySerializer
         return IssueSerializer
-
-
